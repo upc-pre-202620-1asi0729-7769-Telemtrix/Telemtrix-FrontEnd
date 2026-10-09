@@ -1,0 +1,37 @@
+<form (ngSubmit)="onSubmit()" #form="ngForm" class="form-grid">
+  <div class="form-group">
+    <label>{{ 'maintenance.vehicle' | translate }}</label>
+    <input type="number" [(ngModel)]="order.vehicleId" name="vehicleId" required min="1">
+  </div>
+  <div class="form-group">
+    <label>{{ 'maintenance.type' | translate }}</label>
+    <select [(ngModel)]="order.type" name="type" required>
+      <option value="PREVENTIVE">{{ 'maintenance.type-preventive' | translate }}</option>
+      <option value="CORRECTIVE">{{ 'maintenance.type-corrective' | translate }}</option>
+    </select>
+  </div>
+  <div class="form-group full-width">
+    <label>{{ 'maintenance.description' | translate }}</label>
+    <textarea [(ngModel)]="order.description" name="description" required rows="3"></textarea>
+  </div>
+  <div class="form-group">
+    <label>{{ 'maintenance.cost' | translate }} (S/)</label>
+    <input type="number" [(ngModel)]="order.cost" name="cost" required min="0" step="0.01">
+  </div>
+  <div class="form-group">
+    <label>{{ 'maintenance.scheduled' | translate }}</label>
+    <input type="datetime-local" [(ngModel)]="order.scheduledDate" name="scheduledDate" required>
+  </div>
+  <div class="form-group">
+    <label>{{ 'maintenance.status' | translate }}</label>
+    <select [(ngModel)]="order.status" name="status" required>
+      <option value="PENDING">{{ 'maintenance.status-pending' | translate }}</option>
+      <option value="IN_PROGRESS">{{ 'maintenance.status-in-progress' | translate }}</option>
+      <option value="COMPLETED">{{ 'maintenance.status-completed' | translate }}</option>
+    </select>
+  </div>
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="onCancel()">{{ 'common.cancel' | translate }}</button>
+    <button type="submit" class="btn-save" [disabled]="!form.valid">{{ 'common.save' | translate }}</button>
+  </div>
+</form>
