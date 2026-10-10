@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class BaseApi {
-  private baseUrl = environment.platformProviderApiBaseUrl;
+  private baseUrl = 'https://motus-backend.onrender.com';
 
   constructor(private http: HttpClient) {}
 
