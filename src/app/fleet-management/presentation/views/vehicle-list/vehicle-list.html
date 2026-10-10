@@ -18,9 +18,9 @@
       (input)="applyFilters()">
     <select class="filter-select" [(ngModel)]="statusFilter" (change)="applyFilters()">
       <option value="ALL">{{ 'common.all' | translate }}</option>
-      <option value="AVAILABLE">{{ 'fleet.status-available' | translate }}</option>
-      <option value="IN_MAINTENANCE">{{ 'fleet.status-in-maintenance' | translate }}</option>
-      <option value="OUT_OF_SERVICE">{{ 'fleet.status-out-of-service' | translate }}</option>
+      <option value="AVAILABLE">Disponible</option>
+      <option value="IN_MAINTENANCE">En mantenimiento</option>
+      <option value="OUT_OF_SERVICE">Fuera de servicio</option>
     </select>
   </div>
 
@@ -45,23 +45,23 @@
       <td>{{ v.odometer }} km</td>
       <td>
           <span class="status" [ngClass]="v.status.toLowerCase()">
-            {{ 'fleet.status-' + v.status.toLowerCase().replace('_', '-') | translate }}
+            {{ v.status }}
           </span>
       </td>
       <td class="actions">
-        <button class="btn-icon edit" (click)="openEditDialog(v)" [title]="'common.edit' | translate">✏️</button>
-        <button class="btn-icon delete" (click)="deleteVehicle(v.id)" [title]="'common.delete' | translate">🗑️</button>
+        <button class="btn-icon edit" (click)="openEditDialog(v)" title="Editar">✏️</button>
+        <button class="btn-icon delete" (click)="deleteVehicle(v.id)" title="Eliminar">🗑️</button>
       </td>
     </tr>
     <tr *ngIf="filteredVehicles.length === 0">
-      <td colspan="7" class="empty-state">{{ 'fleet.empty' | translate }}</td>
+      <td colspan="7" class="empty-state">No hay vehículos registrados</td>
     </tr>
     </tbody>
   </table>
 </div>
 
 <app-dialog
-  [title]="(editingVehicle.id === 0 ? 'fleet.new-title' : 'fleet.edit-title') | translate"
+  [title]="editingVehicle.id === 0 ? 'Registrar Vehículo' : 'Editar Vehículo'"
   [visible]="showDialog"
   (close)="closeDialog()">
   <app-vehicle-form
