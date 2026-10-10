@@ -28,6 +28,7 @@
   border-radius: 6px;
   font-size: 0.9rem;
   font-family: inherit;
+  background: white;
 }
 
 .form-group input:focus,
@@ -64,7 +65,7 @@
   color: white;
 }
 
-.btn-save:hover {
+.btn-save:hover:not(:disabled) {
   background: #059669;
 }
 

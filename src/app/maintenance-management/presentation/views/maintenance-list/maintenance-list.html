@@ -1,11 +1,11 @@
 <div class="maintenance-container">
   <div class="page-header">
     <div>
-      <h2>{{ 'maintenance.list-title' | translate }}</h2>
-      <p class="subtitle">{{ 'maintenance.subtitle' | translate }}</p>
+      <h2>Gestión de mantenimiento</h2>
+      <p class="subtitle">Programa y controla los mantenimientos de la flota</p>
     </div>
     <button class="btn-primary" (click)="openCreate()">
-      + {{ 'maintenance.register' | translate }}
+      + Nueva orden
     </button>
   </div>
 
@@ -13,59 +13,59 @@
     <input
       type="text"
       class="search-input"
-      [placeholder]="'common.search' | translate"
+      placeholder="🔍 Buscar por vehículo o descripción..."
       [(ngModel)]="searchTerm"
       (input)="applyFilters()">
     <select class="filter-select" [(ngModel)]="statusFilter" (change)="applyFilters()">
-      <option value="ALL">{{ 'common.all' | translate }}</option>
-      <option value="PENDING">{{ 'maintenance.status-pending' | translate }}</option>
-      <option value="IN_PROGRESS">{{ 'maintenance.status-in-progress' | translate }}</option>
-      <option value="COMPLETED">{{ 'maintenance.status-completed' | translate }}</option>
+      <option value="ALL">Todos los estados</option>
+      <option value="PENDING">Pendiente</option>
+      <option value="IN_PROGRESS">En Progreso</option>
+      <option value="COMPLETED">Completado</option>
     </select>
   </div>
 
   <table class="data-table">
     <thead>
     <tr>
-      <th>{{ 'maintenance.vehicle' | translate }}</th>
-      <th>{{ 'maintenance.type' | translate }}</th>
-      <th>{{ 'maintenance.description' | translate }}</th>
-      <th>{{ 'maintenance.cost' | translate }}</th>
-      <th>{{ 'maintenance.status' | translate }}</th>
-      <th>{{ 'maintenance.scheduled' | translate }}</th>
-      <th>{{ 'common.actions' | translate }}</th>
+      <th>Vehículo</th>
+      <th>Tipo</th>
+      <th>Descripción</th>
+      <th>Costo</th>
+      <th>Estado</th>
+      <th>Programado</th>
+      <th>Acciones</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let o of filteredOrders">
-      <td>#{{ o.vehicleId }}</td>
+      <td>{{ getVehicleLabel(o.vehicleId) }}</td>
       <td>
           <span class="badge" [ngClass]="o.type.toLowerCase()">
-            {{ 'maintenance.type-' + o.type.toLowerCase() | translate }}
+            {{ getTypeLabel(o.type) }}
           </span>
       </td>
       <td class="truncate">{{ o.description }}</td>
       <td>S/ {{ o.cost | number:'1.2-2' }}</td>
       <td>
           <span class="badge" [ngClass]="o.status.toLowerCase().replace('_', '-')">
-            {{ 'maintenance.status-' + o.status.toLowerCase().replace('_', '-') | translate }}
+            {{ getStatusLabel(o.status) }}
           </span>
       </td>
       <td>{{ o.scheduledDate | date:'short' }}</td>
       <td class="actions">
-        <button class="btn-icon edit" (click)="openEdit(o)" [title]="'common.edit' | translate">✏️</button>
-        <button class="btn-icon delete" (click)="delete(o.id)" [title]="'common.delete' | translate">🗑️</button>
+        <button class="btn-icon edit" (click)="openEdit(o)" title="Editar">✏️</button>
+        <button class="btn-icon delete" (click)="delete(o.id)" title="Eliminar">🗑️</button>
       </td>
     </tr>
     <tr *ngIf="filteredOrders.length === 0">
-      <td colspan="7" class="empty-state">{{ 'maintenance.empty' | translate }}</td>
+      <td colspan="7" class="empty-state">No hay órdenes de mantenimiento</td>
     </tr>
     </tbody>
   </table>
 </div>
 
 <app-dialog
-  [title]="(editingOrder.id === 0 ? 'maintenance.new-title' : 'maintenance.edit-title') | translate"
+  [title]="editingOrder.id === 0 ? 'Nueva Orden de Mantenimiento' : 'Editar Orden de Mantenimiento'"
   [visible]="showDialog"
   (close)="close()">
   <app-maintenance-form

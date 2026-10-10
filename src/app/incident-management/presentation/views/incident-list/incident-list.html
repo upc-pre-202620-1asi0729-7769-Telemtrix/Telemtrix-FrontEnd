@@ -22,29 +22,29 @@
     </thead>
     <tbody>
     <tr *ngFor="let i of incidents">
-      <td>{{ i.vehicleId }}</td>
-      <td>{{ i.driverId }}</td>
+      <td>{{ getVehicleLabel(i.vehicleId) }}</td>
+      <td>{{ getDriverName(i.driverId) }}</td>
       <td>{{ i.description }}</td>
       <td>
           <span class="severity" [ngClass]="i.severity.toLowerCase()">
-            {{ 'incidents.severity-' + i.severity.toLowerCase() | translate }}
+            {{ i.severity }}
           </span>
       </td>
       <td>{{ i.date | date:'short' }}</td>
       <td class="actions">
-        <button class="btn-icon edit" (click)="openEdit(i)" [title]="'common.edit' | translate">✏️</button>
-        <button class="btn-icon delete" (click)="delete(i.id)" [title]="'common.delete' | translate">🗑️</button>
+        <button class="btn-icon edit" (click)="openEdit(i)" title="Editar">✏️</button>
+        <button class="btn-icon delete" (click)="delete(i.id)" title="Eliminar">🗑️</button>
       </td>
     </tr>
     <tr *ngIf="incidents.length === 0">
-      <td colspan="6" class="empty-state">{{ 'incidents.empty' | translate }}</td>
+      <td colspan="6" class="empty-state">No hay incidencias registradas</td>
     </tr>
     </tbody>
   </table>
 </div>
 
 <app-dialog
-  [title]="(editingIncident.id === 0 ? 'incidents.new-title' : 'incidents.edit-title') | translate"
+  [title]="editingIncident.id === 0 ? 'Reportar Incidencia' : 'Editar Incidencia'"
   [visible]="showDialog"
   (close)="close()">
   <app-incident-form

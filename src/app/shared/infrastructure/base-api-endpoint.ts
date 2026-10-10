@@ -3,7 +3,10 @@ import { Observable } from 'rxjs';
 import { BaseEntity } from '../domain/model/base-entity';
 
 export abstract class BaseApiEndpoint<T extends BaseEntity> {
-  protected constructor(protected http: HttpClient, protected url: string) {}
+  protected constructor(
+    protected http: HttpClient,
+    protected url: string
+  ) {}
 
   getAll(): Observable<T[]> {
     return this.http.get<T[]>(this.url);
