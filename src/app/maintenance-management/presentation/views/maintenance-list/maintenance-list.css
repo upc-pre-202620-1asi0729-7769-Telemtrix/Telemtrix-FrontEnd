@@ -12,7 +12,7 @@
 .page-header h2 {
   margin: 0;
   font-size: 1.75rem;
-  color: #1a1a2e;
+  color: #1a237e;
 }
 
 .subtitle {
@@ -73,7 +73,7 @@
 }
 
 .data-table th {
-  background: #1a1a2e;
+  background: #1a237e;
   color: white;
   padding: 0.9rem 1rem;
   text-align: left;
@@ -105,7 +105,7 @@
 .badge.preventive { background: #dbeafe; color: #1e40af; }
 .badge.corrective { background: #fee2e2; color: #991b1b; }
 .badge.pending { background: #fef3c7; color: #92400e; }
-.badge.in_progress { background: #dbeafe; color: #1e40af; }
+.badge.in-progress { background: #dbeafe; color: #1e40af; }
 .badge.completed { background: #d1fae5; color: #065f46; }
 
 .truncate {

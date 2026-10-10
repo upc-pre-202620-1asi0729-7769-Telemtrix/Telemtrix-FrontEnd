@@ -6,6 +6,6 @@ import { MaintenanceOrder } from '../domain/model/maintenance-order.entity';
 @Injectable({ providedIn: 'root' })
 export class MaintenanceApiEndpoint extends BaseApiEndpoint<MaintenanceOrder> {
   constructor(private baseApi: BaseApi) {
-    super(baseApi.getHttpClient(), `${baseApi.getBaseUrl()}/maintenance-orders`);
+    super(baseApi.getHttpClient(), `${baseApi.getBaseUrl()}/maintenanceOrders`);
   }
 }

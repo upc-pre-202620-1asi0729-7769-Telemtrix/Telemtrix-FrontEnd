@@ -1,34 +1,48 @@
 <form (ngSubmit)="onSubmit()" #form="ngForm" class="form-grid">
-  <div class="form-group">
-    <label>{{ 'telemetry.vehicle' | translate }}</label>
-    <input type="number" [(ngModel)]="record.vehicleId" name="vehicleId" required min="1">
+
+  <div class="form-group full-width">
+    <label>Vehículo</label>
+    <select [(ngModel)]="record.vehicleId" name="vehicleId" required>
+      <option [ngValue]="0" disabled>-- Selecciona un vehículo --</option>
+      <option *ngFor="let v of vehicles" [ngValue]="v.id">
+        {{ v.plate }} - {{ v.brand }} {{ v.model }}
+      </option>
+    </select>
   </div>
+
   <div class="form-group">
-    <label>{{ 'telemetry.speed' | translate }}</label>
+    <label>Velocidad (km/h)</label>
     <input type="number" [(ngModel)]="record.speed" name="speed" required min="0">
   </div>
+
   <div class="form-group">
-    <label>{{ 'telemetry.fuel' | translate }}</label>
+    <label>Nivel de combustible (%)</label>
     <input type="number" [(ngModel)]="record.fuelLevel" name="fuelLevel" required min="0" max="100">
   </div>
+
   <div class="form-group">
-    <label>{{ 'telemetry.temp' | translate }}</label>
+    <label>Temperatura motor (°C)</label>
     <input type="number" [(ngModel)]="record.engineTemperature" name="engineTemperature" required>
   </div>
+
   <div class="form-group">
-    <label>{{ 'telemetry.latitude' | translate }}</label>
+    <label>Latitud</label>
     <input type="number" step="0.0001" [(ngModel)]="record.latitude" name="latitude" required>
   </div>
+
   <div class="form-group">
-    <label>{{ 'telemetry.longitude' | translate }}</label>
+    <label>Longitud</label>
     <input type="number" step="0.0001" [(ngModel)]="record.longitude" name="longitude" required>
   </div>
+
   <div class="form-group full-width">
-    <label>{{ 'telemetry.timestamp' | translate }}</label>
+    <label>Fecha y hora</label>
     <input type="datetime-local" [(ngModel)]="record.timestamp" name="timestamp" required>
   </div>
+
   <div class="form-actions">
-    <button type="button" class="btn-cancel" (click)="onCancel()">{{ 'common.cancel' | translate }}</button>
-    <button type="submit" class="btn-save" [disabled]="!form.valid">{{ 'common.save' | translate }}</button>
+    <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
+    <button type="submit" class="btn-save" [disabled]="!form.valid">Guardar</button>
   </div>
+
 </form>

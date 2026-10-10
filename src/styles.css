@@ -9,7 +9,12 @@ html, body {
   font-family: 'Segoe UI', Arial, sans-serif;
   background: #f4f4f9;
   color: #333;
+  -webkit-font-smoothing: antialiased;
 }
 
 a { text-decoration: none; color: inherit; }
 button { font-family: inherit; }
+
+html, body {
+  overflow-x: hidden;
+}

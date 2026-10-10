@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { InspectionApiEndpoint } from '../../../infrastructure/inspection-api-endpoint';
 import { Inspection } from '../../../domain/model/inspection.entity';
+import { VehicleApiEndpoint } from '../../../../fleet-management/infrastructure/vehicle-api-endpoint';
+import { Vehicle } from '../../../../fleet-management/domain/model/vehicle.entity';
+import { AuthApiEndpoint } from '../../../../iam/infrastructure/auth-api-endpoint';
+import { User } from '../../../../iam/domain/model/user.entity';
 import { DialogComponent } from '../../../../shared/presentation/components/dialog/dialog';
 import { InspectionFormComponent } from '../../components/inspection-form/inspection-form';
 
@@ -13,30 +17,59 @@ import { InspectionFormComponent } from '../../components/inspection-form/inspec
   imports: [
     CommonModule,
     FormsModule,
-    TranslatePipe,
     DialogComponent,
+    TranslatePipe,
     InspectionFormComponent
   ],
   templateUrl: './inspection-list.html',
   styleUrls: ['./inspection-list.css']
 })
 export class InspectionListComponent implements OnInit {
+  private inspectionApi = inject(InspectionApiEndpoint);
+  private vehicleApi = inject(VehicleApiEndpoint);
+  private authApi = inject(AuthApiEndpoint);
+  private cdr = inject(ChangeDetectorRef);
+
   inspections: Inspection[] = [];
   filteredInspections: Inspection[] = [];
+  vehicles: Vehicle[] = [];
+  inspectors: User[] = [];
+
   searchTerm = '';
   showDialog = false;
   editingInspection: Inspection = new Inspection();
 
-  constructor(private inspectionApi: InspectionApiEndpoint) {}
-
   ngOnInit(): void {
-    this.load();
+    this.loadVehiclesAndInspectors();
+    this.loadInspections();
   }
 
-  load(): void {
-    this.inspectionApi.getAll().subscribe(data => {
-      this.inspections = data;
-      this.applyFilters();
+  loadVehiclesAndInspectors(): void {
+    this.vehicleApi.getAll().subscribe({
+      next: (data) => {
+        this.vehicles = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error cargando vehículos:', err)
+    });
+
+    this.authApi.getAll().subscribe({
+      next: (data) => {
+        this.inspectors = data.filter(u => u.role === 'DRIVER' || u.role === 'FLEET_MANAGER');
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error cargando inspectores:', err)
+    });
+  }
+
+  loadInspections(): void {
+    this.inspectionApi.getAll().subscribe({
+      next: (data) => {
+        this.inspections = data;
+        this.applyFilters();
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error cargando inspecciones:', err)
     });
   }
 
@@ -46,6 +79,16 @@ export class InspectionListComponent implements OnInit {
         i.vehicleId.toString().includes(this.searchTerm) ||
         i.inspectorId.toString().includes(this.searchTerm);
     });
+  }
+
+  getVehicleLabel(id: number): string {
+    const v = this.vehicles.find(x => x.id === id);
+    return v ? `${v.plate} - ${v.brand} ${v.model}` : `#${id}`;
+  }
+
+  getInspectorName(id: number): string {
+    const i = this.inspectors.find(x => x.id === id);
+    return i ? i.name : `#${id}`;
   }
 
   openCreate(): void {
@@ -67,12 +110,12 @@ export class InspectionListComponent implements OnInit {
   save(inspection: Inspection): void {
     if (inspection.id === 0) {
       this.inspectionApi.create(inspection).subscribe(() => {
-        this.load();
+        this.loadInspections();
         this.close();
       });
     } else {
       this.inspectionApi.update(inspection.id, inspection).subscribe(() => {
-        this.load();
+        this.loadInspections();
         this.close();
       });
     }
@@ -80,7 +123,7 @@ export class InspectionListComponent implements OnInit {
 
   delete(id: number): void {
     if (confirm('¿Eliminar esta inspección?')) {
-      this.inspectionApi.delete(id).subscribe(() => this.load());
+      this.inspectionApi.delete(id).subscribe(() => this.loadInspections());
     }
   }
 

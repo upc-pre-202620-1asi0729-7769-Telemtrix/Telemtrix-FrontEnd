@@ -1,23 +1,28 @@
-
 .app-layout {
   display: flex;
   min-height: 100vh;
+  width: 100%;
   background: #f4f4f9;
-  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
+/* ============================================
+   SIDEBAR
+   ============================================ */
 .sidebar {
   width: 260px;
+  min-width: 260px;
   min-height: 100vh;
   background: #1a237e;
   color: white;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   position: sticky;
   top: 0;
   height: 100vh;
   overflow-y: auto;
-  flex-shrink: 0;
+  transition: transform 0.3s ease, width 0.3s ease;
+  z-index: 100;
 }
 
 .sidebar-brand {
@@ -26,6 +31,7 @@
   gap: 0.75rem;
   padding: 1.5rem 1.25rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
 }
 
 .brand-icon {
@@ -37,6 +43,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.4rem;
+  flex-shrink: 0;
 }
 
 .brand-text h1 {
@@ -50,7 +57,27 @@
   margin: 0.2rem 0 0;
   font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.65);
-  line-height: 1.2;
+}
+
+.close-mobile-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: none;
+}
+
+.sidebar.mobile .close-mobile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar-nav {
@@ -100,12 +127,19 @@
   font-size: 1.1rem;
   width: 22px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .nav-label {
   flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* ============================================
+   MAIN WRAPPER
+   ============================================ */
 .main-wrapper {
   flex: 1;
   display: flex;
@@ -113,6 +147,9 @@
   min-width: 0;
 }
 
+/* ============================================
+   HEADER
+   ============================================ */
 .top-header {
   height: 64px;
   background: white;
@@ -124,6 +161,37 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  gap: 1rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  background: white;
+  cursor: pointer;
+  padding: 0 10px;
+  flex-shrink: 0;
+}
+
+.hamburger-btn span {
+  display: block;
+  height: 2px;
+  background: #333;
+  border-radius: 2px;
 }
 
 .breadcrumb {
@@ -132,21 +200,53 @@
   gap: 0.5rem;
   font-size: 0.95rem;
   color: #333;
+  min-width: 0;
 }
 
 .breadcrumb-icon {
   font-size: 1rem;
   color: #666;
+  flex-shrink: 0;
 }
 
 .breadcrumb-text {
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid #eee;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+
+.user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a237e;
+}
+
+.user-role {
+  font-size: 0.72rem;
+  color: #888;
 }
 
 .icon-button {
@@ -161,6 +261,7 @@
   justify-content: center;
   font-size: 1rem;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .icon-button:hover {
@@ -168,15 +269,42 @@
   border-color: #ddd;
 }
 
+/* ============================================
+   CONTENT AREA
+   ============================================ */
 .content-area {
   flex: 1;
   padding: 1.5rem 2rem;
   overflow-y: auto;
+  background: #f4f4f9;
 }
 
-@media (max-width: 900px) {
+/* ============================================
+   OVERLAY (móvil)
+   ============================================ */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* ============================================
+   TABLET (768px - 1024px)
+   Sidebar colapsado, solo iconos
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1024px) {
   .sidebar {
-    width: 70px;
+    width: 76px;
+    min-width: 76px;
   }
 
   .brand-text,
@@ -196,6 +324,79 @@
   }
 
   .nav-icon {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+  }
+
+  .content-area {
+    padding: 1.25rem;
+  }
+}
+
+/* ============================================
+   MÓVIL (< 768px)
+   Sidebar oculto, se abre con overlay
+   ============================================ */
+@media (max-width: 767px) {
+  .app-layout {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    width: 260px;
+    min-width: 260px;
+    height: 100vh;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .top-header {
+    padding: 0 1rem;
+    height: 60px;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .user-menu {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .content-area {
+    padding: 1rem;
+  }
+}
+
+/* ============================================
+   MÓVIL PEQUEÑO (< 480px)
+   ============================================ */
+@media (max-width: 480px) {
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  .icon-button {
+    width: 34px;
+    height: 34px;
+  }
+
+  .content-area {
+    padding: 0.75rem;
   }
 }
